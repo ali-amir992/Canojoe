@@ -65,34 +65,39 @@
                 <th>Address</th>
                 <th>Status</th>
                 <th>Type</th>
+                <th>Street</th>
+                <th>City</th>
+                <th>County</th>
+                <th>Phone</th>
+                <th>Zip Code</th>
+                <th>Email</th>
+                <th>Website</th>
             </tr>
         </thead>
         <tbody id="resultsBody"></tbody>
     </table>
 
     <script>
-      document.getElementById('searchInput').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    fetch('merged_output.json')
-        .then(response => response.json())
-        .then(data => {
-            const filteredData = data.filter(item => 
-                (item.name && item.name.toLowerCase().includes(searchTerm)) || 
-                (item.license_number && String(item.license_number).toLowerCase().includes(searchTerm))
-            );
-            displayResults(filteredData);
-        })
-        .catch(error => console.error('Error fetching JSON:', error));
-});
-
-
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            fetch('merged_output.json')
+                .then(response => response.json())
+                .then(data => {
+                    const filteredData = data.filter(item => 
+                        (item.name && item.name.toLowerCase().includes(searchTerm)) || 
+                        (item.license_number && String(item.license_number).toLowerCase().includes(searchTerm))
+                    );
+                    displayResults(filteredData);
+                })
+                .catch(error => console.error('Error fetching JSON:', error));
+        });
 
         function displayResults(data) {
             const tbody = document.getElementById('resultsBody');
             tbody.innerHTML = '';
 
             if (data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="no-results">No results found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" class="no-results">No results found</td></tr>';
                 return;
             }
 
@@ -101,9 +106,16 @@
                 row.innerHTML = `
                     <td>${item.name}</td>
                     <td>${item.license_number}</td>
-                    <td>${item.address}</td>
-                    <td>${item.license_status}</td>
-                    <td>${item.license_type}</td>
+                    <td>${item.address || 'N/A'}</td>
+                    <td>${item.license_status || 'N/A'}</td>
+                    <td>${item.license_type || 'N/A'}</td>
+                    <td>${item.street || 'N/A'}</td>
+                    <td>${item.city || 'N/A'}</td>
+                    <td>${item.county || 'N/A'}</td>
+                    <td>${item.phone || 'N/A'}</td>
+                    <td>${item.zip_code || 'N/A'}</td>
+                    <td>${item.email || 'N/A'}</td>
+                    <td>${item.website || 'N/A'}</td>
                 `;
                 tbody.appendChild(row);
             });
